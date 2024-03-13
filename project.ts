@@ -28,13 +28,13 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: [
-      'https://full-node.mainnet-1.coreum.dev:26657',
+      'https://dymension-rpc.publicnode.com:443',
       // 'https://full-node.testnet-1.coreum.dev:26657'
       // https://injective-rpc.w3coins.io   52669166
     ],
 
     // --------------- Chain id ------------------ [ ]
-    chainId: 'coreum-mainnet-1',
+    chainId: 'dymension_1100-1',
 
     chaintypes: new Map([
       // =====================================================
@@ -1044,7 +1044,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 12370000,
+      startBlock: 527554,
 // endBlock:13211057,
       mapping: {
         file: './dist/index.js',
