@@ -9,5 +9,8 @@ export * from "./cosmos_proto/bundle";
 export * from "./cosmos/bundle";
 export * from "./tendermint/bundle";
 export * from "./cosmwasm/bundle";
+export * from "./dymensionxyz/bundle";
+export * from "./osmosis/bundle";
+export * from "./ethermint/bundle";
 export * from "./google/bundle";
 export * from "./ibc/bundle";

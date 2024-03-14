@@ -10,7 +10,7 @@
     "dev": "subql codegen && subql build && docker compose pull && docker compose up --remove-orphans",
     "prepack": "rm -rf dist && npm run build",
     "test": "subql build && subql-node-cosmos test",
-    "clean": "rm -rf ./dist && rm -rf ./.data",
+    "clean": "sudo rm -rf ./dist &&sudo rm -rf ./.data",
     "fire": "subql build && docker-compose pull && docker-compose up --remove-orphans",
     "thanos": "sudo rm -rf ./dist && sudo rm -rf ./.data && subql build && docker-compose pull && docker-compose up --remove-orphans"
   },

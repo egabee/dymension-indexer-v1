@@ -53,6 +53,16 @@ import * as IbcCoreClientV1Tx from "./proto-interfaces/ibc/core/client/v1/tx";
 
 import * as IbcCoreConnectionV1Tx from "./proto-interfaces/ibc/core/connection/v1/tx";
 
+import * as DymensionEibcTx from "./proto-interfaces/dymension/eibc/tx";
+
+import * as EthermintEvmV1Tx from "./proto-interfaces/ethermint/evm/v1/tx";
+
+import * as EthermintFeemarketV1Tx from "./proto-interfaces/ethermint/feemarket/v1/tx";
+
+import * as DymensionGammV1beta1Tx from "./proto-interfaces/dymension/gamm/v1beta1/tx";
+
+import * as DymensionLockupTx from "./proto-interfaces/dymension/lockup/tx";
+
 
 export namespace cosmos.auth.v1beta1.tx {
 
@@ -264,5 +274,57 @@ export namespace ibc.core.connection.v1.tx {
   export type MsgConnectionOpenAckMessage = CosmosMessage<IbcCoreConnectionV1Tx.MsgConnectionOpenAck>;
   export type MsgConnectionOpenConfirmMessage = CosmosMessage<IbcCoreConnectionV1Tx.MsgConnectionOpenConfirm>;
   export type MsgUpdateParamsMessage = CosmosMessage<IbcCoreConnectionV1Tx.MsgUpdateParams>;
+}
+
+export namespace dymension.eibc.tx {
+
+  export type MsgFulfillOrderMessage = CosmosMessage<DymensionEibcTx.MsgFulfillOrder>;
+}
+
+export namespace ethermint.evm.v1.tx {
+
+  export type MsgEthereumTxMessage = CosmosMessage<EthermintEvmV1Tx.MsgEthereumTx>;
+  export type MsgUpdateParamsMessage = CosmosMessage<EthermintEvmV1Tx.MsgUpdateParams>;
+}
+
+export namespace ethermint.feemarket.v1.tx {
+
+  export type MsgUpdateParamsMessage = CosmosMessage<EthermintFeemarketV1Tx.MsgUpdateParams>;
+}
+
+export namespace dymension.gamm.v1beta1.tx {
+
+  export type MsgJoinPoolMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgJoinPool>;
+  export type MsgJoinPoolResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgJoinPoolResponse>;
+  export type MsgExitPoolMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgExitPool>;
+  export type MsgExitPoolResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgExitPoolResponse>;
+  export type MsgSwapExactAmountInMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgSwapExactAmountIn>;
+  export type MsgSwapExactAmountInResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgSwapExactAmountInResponse>;
+  export type MsgSwapExactAmountOutMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgSwapExactAmountOut>;
+  export type MsgSwapExactAmountOutResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgSwapExactAmountOutResponse>;
+  export type MsgJoinSwapExternAmountInMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgJoinSwapExternAmountIn>;
+  export type MsgJoinSwapExternAmountInResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgJoinSwapExternAmountInResponse>;
+  export type MsgJoinSwapShareAmountOutMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgJoinSwapShareAmountOut>;
+  export type MsgJoinSwapShareAmountOutResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgJoinSwapShareAmountOutResponse>;
+  export type MsgExitSwapShareAmountInMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgExitSwapShareAmountIn>;
+  export type MsgExitSwapShareAmountInResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgExitSwapShareAmountInResponse>;
+  export type MsgExitSwapExternAmountOutMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgExitSwapExternAmountOut>;
+  export type MsgExitSwapExternAmountOutResponseMessage = CosmosMessage<DymensionGammV1beta1Tx.MsgExitSwapExternAmountOutResponse>;
+}
+
+export namespace dymension.lockup.tx {
+
+  export type MsgLockTokensMessage = CosmosMessage<DymensionLockupTx.MsgLockTokens>;
+  export type MsgLockTokensResponseMessage = CosmosMessage<DymensionLockupTx.MsgLockTokensResponse>;
+  export type MsgBeginUnlockingAllMessage = CosmosMessage<DymensionLockupTx.MsgBeginUnlockingAll>;
+  export type MsgBeginUnlockingAllResponseMessage = CosmosMessage<DymensionLockupTx.MsgBeginUnlockingAllResponse>;
+  export type MsgBeginUnlockingMessage = CosmosMessage<DymensionLockupTx.MsgBeginUnlocking>;
+  export type MsgBeginUnlockingResponseMessage = CosmosMessage<DymensionLockupTx.MsgBeginUnlockingResponse>;
+  export type MsgExtendLockupMessage = CosmosMessage<DymensionLockupTx.MsgExtendLockup>;
+  export type MsgExtendLockupResponseMessage = CosmosMessage<DymensionLockupTx.MsgExtendLockupResponse>;
+  export type MsgForceUnlockMessage = CosmosMessage<DymensionLockupTx.MsgForceUnlock>;
+  export type MsgForceUnlockResponseMessage = CosmosMessage<DymensionLockupTx.MsgForceUnlockResponse>;
+  export type MsgSetRewardReceiverAddressMessage = CosmosMessage<DymensionLockupTx.MsgSetRewardReceiverAddress>;
+  export type MsgSetRewardReceiverAddressResponseMessage = CosmosMessage<DymensionLockupTx.MsgSetRewardReceiverAddressResponse>;
 }
 

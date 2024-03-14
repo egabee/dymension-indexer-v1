@@ -443,7 +443,7 @@ const project: CosmosProject = {
         {
           file: './proto/cosmos/staking/v1beta1/authz.proto',
           messages: [
-            'StakeAuthorization','AuthorizationType'
+            'StakeAuthorization', 'AuthorizationType'
           ],
         },
       ],
@@ -1038,6 +1038,32 @@ const project: CosmosProject = {
       ],
       ['google.protobuf.Any', { file: './proto/google/protobuf/any.proto', messages: ['Any'] }],
       ['google.protobuf.Timestamp', { file: './proto/google/protobuf/timestamp.proto', messages: ['Timestamp'] }],
+      // =====================================================
+      // =====================================================
+      // --------------------- dymension  --------------------
+      // =====================================================
+      // =====================================================
+      ['common.rollapp_packet', { file: './proto/dymension/common/rollapp_packet.proto', messages: ['RollappPacket'] }],
+      ['common.status', { file: './proto/dymension/common/status.proto', messages: ['Status'] }],
+
+      // --------------------- eibc  --------------------
+      ['eibc.tx', { file: './proto/dymension/eibc/tx.proto', messages: ['MsgFulfillOrder'] }],
+
+      // --------------------- ethermint  ----------------
+      ['ethermin.evm.v1.tx', { file: './proto/ethermint/evm/v1/tx.proto', messages: ['MsgEthereumTx', 'LegacyTx', 'AccessListTx', 'DynamicFeeTx', 'ExtensionOptionsEthereumTx', 'MsgUpdateParams'] }],
+      ['ethermin.feemarket.v1.tx', { file: './proto/ethermint/feemarket/v1/tx.proto', messages: ['MsgUpdateParams'] }],
+
+      // --------------------- gamm -------------------
+      ['gmma.v1.tx', {
+        file: './proto/dymension/gamm/v1beta1/tx.proto', messages: ['MsgJoinPool', 'MsgJoinPoolResponse', 'MsgExitPool', 'MsgExitPoolResponse', 'MsgSwapExactAmountIn', 'MsgSwapExactAmountInResponse', 'MsgSwapExactAmountOut', 'MsgSwapExactAmountOutResponse', 'MsgJoinSwapExternAmountIn', 'MsgJoinSwapExternAmountInResponse', 'MsgJoinSwapShareAmountOut', 'MsgJoinSwapShareAmountOutResponse', 'MsgExitSwapShareAmountIn', 'MsgExitSwapShareAmountInResponse', 'MsgExitSwapExternAmountOut', 'MsgExitSwapExternAmountOutResponse']
+      }],
+      // --------------------- Lookup -----------------
+      ['lookup.v1.tx', {
+        file: './proto/dymension/lockup/tx.proto', messages: ['MsgLockTokens', 'MsgLockTokensResponse', 'MsgBeginUnlockingAll', 'MsgBeginUnlockingAllResponse', 'MsgBeginUnlocking', 'MsgBeginUnlockingResponse', 'MsgExtendLockup', 'MsgExtendLockupResponse', 'MsgForceUnlock', 'MsgForceUnlockResponse', 'MsgSetRewardReceiverAddress', 'MsgSetRewardReceiverAddressResponse']
+      }],
+
+
+
     ]),
   },
 
@@ -1045,7 +1071,7 @@ const project: CosmosProject = {
     {
       kind: CosmosDatasourceKind.Runtime,
       startBlock: 527554,
-// endBlock:13211057,
+      // endBlock:13211057,
       mapping: {
         file: './dist/index.js',
         handlers: [
