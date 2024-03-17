@@ -28,13 +28,13 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: [
-      'https://full-node.mainnet-1.coreum.dev:26657',
+      'https://dymension-rpc.publicnode.com:443',
       // 'https://full-node.testnet-1.coreum.dev:26657'
       // https://injective-rpc.w3coins.io   52669166
     ],
 
     // --------------- Chain id ------------------ [ ]
-    chainId: 'coreum-mainnet-1',
+    chainId: 'dymension_1100-1',
 
     chaintypes: new Map([
       // =====================================================
@@ -442,9 +442,7 @@ const project: CosmosProject = {
         'cosmos.staking.v1beta1.autz',
         {
           file: './proto/cosmos/staking/v1beta1/authz.proto',
-          messages: [
-            'StakeAuthorization','AuthorizationType'
-          ],
+          messages: ['StakeAuthorization', 'AuthorizationType'],
         },
       ],
       [
@@ -1038,14 +1036,117 @@ const project: CosmosProject = {
       ],
       ['google.protobuf.Any', { file: './proto/google/protobuf/any.proto', messages: ['Any'] }],
       ['google.protobuf.Timestamp', { file: './proto/google/protobuf/timestamp.proto', messages: ['Timestamp'] }],
+      // =====================================================
+      // =====================================================
+      // --------------------- dymension  --------------------
+      // =====================================================
+      // =====================================================
+      ['common.rollapp_packet', { file: './proto/dymension/common/rollapp_packet.proto', messages: ['RollappPacket'] }],
+      ['common.status', { file: './proto/dymension/common/status.proto', messages: ['Status'] }],
+
+      // --------------------- eibc  --------------------
+      ['eibc.tx', { file: './proto/dymension/eibc/tx.proto', messages: ['MsgFulfillOrder'] }],
+
+      // --------------------- ethermint  ----------------
+      [
+        'ethermin.evm.v1.tx',
+        {
+          file: './proto/ethermint/evm/v1/tx.proto',
+          messages: [
+            'MsgEthereumTx',
+            'LegacyTx',
+            'AccessListTx',
+            'DynamicFeeTx',
+            'ExtensionOptionsEthereumTx',
+            'MsgUpdateParams',
+          ],
+        },
+      ],
+      ['ethermin.feemarket.v1.tx', { file: './proto/ethermint/feemarket/v1/tx.proto', messages: ['MsgUpdateParams'] }],
+      [
+        'ethermint.evm.v1.evm',
+        {
+          file: './proto/ethermint/evm/v1/evm.proto',
+          messages: [
+            'Params',
+            'ChainConfig',
+            'State',
+            'TransactionLogs',
+            'Log',
+            'TxResult',
+            'AccessTuple',
+            'TraceConfig',
+          ],
+        },
+      ],
+
+      // --------------------- gamm -------------------
+      [
+        'gmma.v1.tx',
+        {
+          file: './proto/dymension/gamm/v1beta1/tx.proto',
+          messages: [
+            'MsgJoinPool',
+            'MsgJoinPoolResponse',
+            'MsgExitPool',
+            'MsgExitPoolResponse',
+            'MsgSwapExactAmountIn',
+            'MsgSwapExactAmountInResponse',
+            'MsgSwapExactAmountOut',
+            'MsgSwapExactAmountOutResponse',
+            'MsgJoinSwapExternAmountIn',
+            'MsgJoinSwapExternAmountInResponse',
+            'MsgJoinSwapShareAmountOut',
+            'MsgJoinSwapShareAmountOutResponse',
+            'MsgExitSwapShareAmountIn',
+            'MsgExitSwapShareAmountInResponse',
+            'MsgExitSwapExternAmountOut',
+            'MsgExitSwapExternAmountOutResponse',
+          ],
+        },
+      ],
+      // --------------------- Lookup -----------------
+      [
+        'lookup.v1.tx',
+        {
+          file: './proto/dymension/lockup/tx.proto',
+          messages: [
+            'MsgLockTokens',
+            'MsgLockTokensResponse',
+            'MsgBeginUnlockingAll',
+            'MsgBeginUnlockingAllResponse',
+            'MsgBeginUnlocking',
+            'MsgBeginUnlockingResponse',
+            'MsgExtendLockup',
+            'MsgExtendLockupResponse',
+            'MsgForceUnlock',
+            'MsgForceUnlockResponse',
+            'MsgSetRewardReceiverAddress',
+            'MsgSetRewardReceiverAddressResponse',
+          ],
+        },
+      ],
+      [
+        'osmosis.poolmanager.v1beta1',
+        {
+          file: './proto/osmosis/poolmanager/v1beta1/swap_route.proto',
+          messages: [
+            'SwapAmountInRoute',
+            'SwapAmountOutRoute',
+            'SwapAmountInSplitRoute',
+            'SwapAmountOutSplitRoute',
+            '',
+          ],
+        },
+      ],
     ]),
   },
 
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 12370000,
-// endBlock:13211057,
+      startBlock: 527554,
+      // endBlock:13211057,
       mapping: {
         file: './dist/index.js',
         handlers: [
