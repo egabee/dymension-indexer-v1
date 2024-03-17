@@ -1063,6 +1063,22 @@ const project: CosmosProject = {
         },
       ],
       ['ethermin.feemarket.v1.tx', { file: './proto/ethermint/feemarket/v1/tx.proto', messages: ['MsgUpdateParams'] }],
+      [
+        'ethermint.evm.v1.evm',
+        {
+          file: './proto/ethermint/evm/v1/evm.proto',
+          messages: [
+            'Params',
+            'ChainConfig',
+            'State',
+            'TransactionLogs',
+            'Log',
+            'TxResult',
+            'AccessTuple',
+            'TraceConfig',
+          ],
+        },
+      ],
 
       // --------------------- gamm -------------------
       [
@@ -1107,6 +1123,19 @@ const project: CosmosProject = {
             'MsgForceUnlockResponse',
             'MsgSetRewardReceiverAddress',
             'MsgSetRewardReceiverAddressResponse',
+          ],
+        },
+      ],
+      [
+        'osmosis.poolmanager.v1beta1',
+        {
+          file: './proto/osmosis/poolmanager/v1beta1/swap_route.proto',
+          messages: [
+            'SwapAmountInRoute',
+            'SwapAmountOutRoute',
+            'SwapAmountInSplitRoute',
+            'SwapAmountOutSplitRoute',
+            '',
           ],
         },
       ],
