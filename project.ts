@@ -442,9 +442,7 @@ const project: CosmosProject = {
         'cosmos.staking.v1beta1.autz',
         {
           file: './proto/cosmos/staking/v1beta1/authz.proto',
-          messages: [
-            'StakeAuthorization', 'AuthorizationType'
-          ],
+          messages: ['StakeAuthorization', 'AuthorizationType'],
         },
       ],
       [
@@ -1050,20 +1048,68 @@ const project: CosmosProject = {
       ['eibc.tx', { file: './proto/dymension/eibc/tx.proto', messages: ['MsgFulfillOrder'] }],
 
       // --------------------- ethermint  ----------------
-      ['ethermin.evm.v1.tx', { file: './proto/ethermint/evm/v1/tx.proto', messages: ['MsgEthereumTx', 'LegacyTx', 'AccessListTx', 'DynamicFeeTx', 'ExtensionOptionsEthereumTx', 'MsgUpdateParams'] }],
+      [
+        'ethermin.evm.v1.tx',
+        {
+          file: './proto/ethermint/evm/v1/tx.proto',
+          messages: [
+            'MsgEthereumTx',
+            'LegacyTx',
+            'AccessListTx',
+            'DynamicFeeTx',
+            'ExtensionOptionsEthereumTx',
+            'MsgUpdateParams',
+          ],
+        },
+      ],
       ['ethermin.feemarket.v1.tx', { file: './proto/ethermint/feemarket/v1/tx.proto', messages: ['MsgUpdateParams'] }],
 
       // --------------------- gamm -------------------
-      ['gmma.v1.tx', {
-        file: './proto/dymension/gamm/v1beta1/tx.proto', messages: ['MsgJoinPool', 'MsgJoinPoolResponse', 'MsgExitPool', 'MsgExitPoolResponse', 'MsgSwapExactAmountIn', 'MsgSwapExactAmountInResponse', 'MsgSwapExactAmountOut', 'MsgSwapExactAmountOutResponse', 'MsgJoinSwapExternAmountIn', 'MsgJoinSwapExternAmountInResponse', 'MsgJoinSwapShareAmountOut', 'MsgJoinSwapShareAmountOutResponse', 'MsgExitSwapShareAmountIn', 'MsgExitSwapShareAmountInResponse', 'MsgExitSwapExternAmountOut', 'MsgExitSwapExternAmountOutResponse']
-      }],
+      [
+        'gmma.v1.tx',
+        {
+          file: './proto/dymension/gamm/v1beta1/tx.proto',
+          messages: [
+            'MsgJoinPool',
+            'MsgJoinPoolResponse',
+            'MsgExitPool',
+            'MsgExitPoolResponse',
+            'MsgSwapExactAmountIn',
+            'MsgSwapExactAmountInResponse',
+            'MsgSwapExactAmountOut',
+            'MsgSwapExactAmountOutResponse',
+            'MsgJoinSwapExternAmountIn',
+            'MsgJoinSwapExternAmountInResponse',
+            'MsgJoinSwapShareAmountOut',
+            'MsgJoinSwapShareAmountOutResponse',
+            'MsgExitSwapShareAmountIn',
+            'MsgExitSwapShareAmountInResponse',
+            'MsgExitSwapExternAmountOut',
+            'MsgExitSwapExternAmountOutResponse',
+          ],
+        },
+      ],
       // --------------------- Lookup -----------------
-      ['lookup.v1.tx', {
-        file: './proto/dymension/lockup/tx.proto', messages: ['MsgLockTokens', 'MsgLockTokensResponse', 'MsgBeginUnlockingAll', 'MsgBeginUnlockingAllResponse', 'MsgBeginUnlocking', 'MsgBeginUnlockingResponse', 'MsgExtendLockup', 'MsgExtendLockupResponse', 'MsgForceUnlock', 'MsgForceUnlockResponse', 'MsgSetRewardReceiverAddress', 'MsgSetRewardReceiverAddressResponse']
-      }],
-
-
-
+      [
+        'lookup.v1.tx',
+        {
+          file: './proto/dymension/lockup/tx.proto',
+          messages: [
+            'MsgLockTokens',
+            'MsgLockTokensResponse',
+            'MsgBeginUnlockingAll',
+            'MsgBeginUnlockingAllResponse',
+            'MsgBeginUnlocking',
+            'MsgBeginUnlockingResponse',
+            'MsgExtendLockup',
+            'MsgExtendLockupResponse',
+            'MsgForceUnlock',
+            'MsgForceUnlockResponse',
+            'MsgSetRewardReceiverAddress',
+            'MsgSetRewardReceiverAddressResponse',
+          ],
+        },
+      ],
     ]),
   },
 
