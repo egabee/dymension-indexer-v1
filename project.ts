@@ -89,6 +89,13 @@ const project: CosmosProject = {
           messages: ['Input', 'Output', 'Params', 'SendEnabled', 'Supply', 'DenomUnit', 'Metadata'],
         },
       ],
+      [
+        'cosmos.bank.v1beta1.authz',
+        {
+          file: './proto/cosmos/bank/v1beta1/authz.proto',
+          messages: ['SendAuthorization'],
+        },
+      ],
       // =====================================================
       //------------------------ base ------------------------
       // =====================================================
@@ -160,6 +167,13 @@ const project: CosmosProject = {
         'cosmos.crypto.ed.keys',
         {
           file: './proto/cosmos/crypto/ed25519/keys.proto',
+          messages: ['PubKey', 'PrivKey'],
+        },
+      ],
+      [
+        'cosmos.crypto.secp256k1.keys',
+        {
+          file: './proto/cosmos/crypto/secp256k1/keys.proto',
           messages: ['PubKey', 'PrivKey'],
         },
       ],
@@ -366,6 +380,10 @@ const project: CosmosProject = {
         },
       ],
       // =====================================================
+      // ----------------------- ics23 --------------------
+      // =====================================================
+      ['cosmos.ics23.v1', { file: './proto/cosmos/ics23/v1/proofs.proto', messages: ['ProofSpec'] }],
+      // =====================================================
       // ----------------------- mint --------------------
       // =====================================================
       [
@@ -439,7 +457,7 @@ const project: CosmosProject = {
         },
       ],
       [
-        'cosmos.staking.v1beta1.autz',
+        'cosmos.staking.v1beta1.authz',
         {
           file: './proto/cosmos/staking/v1beta1/authz.proto',
           messages: ['StakeAuthorization', 'AuthorizationType'],
@@ -975,6 +993,13 @@ const project: CosmosProject = {
         },
       ],
       [
+        'ibc.lightclients.tendermint.v1',
+        {
+          file: './proto/ibc/lightclients/tendermint/v1/tendermint.proto',
+          messages: ['ClientState', 'ConsensusState', 'Misbehaviour', 'Header', 'Fraction'],
+        },
+      ],
+      [
         'ibc.lightclients.solomachine.v2.Solomachine',
         {
           file: './proto/ibc/lightclients/solomachine/v2/solomachine.proto',
@@ -1035,7 +1060,9 @@ const project: CosmosProject = {
         },
       ],
       ['google.protobuf.Any', { file: './proto/google/protobuf/any.proto', messages: ['Any'] }],
+      ['google.protobuf.Duration', { file: './proto/google/protobuf/duration.proto', messages: ['Duration'] }],
       ['google.protobuf.Timestamp', { file: './proto/google/protobuf/timestamp.proto', messages: ['Timestamp'] }],
+
       // =====================================================
       // =====================================================
       // --------------------- dymension  --------------------
@@ -1043,6 +1070,14 @@ const project: CosmosProject = {
       // =====================================================
       ['common.rollapp_packet', { file: './proto/dymension/common/rollapp_packet.proto', messages: ['RollappPacket'] }],
       ['common.status', { file: './proto/dymension/common/status.proto', messages: ['Status'] }],
+
+      ['delaydack.genesis', { file: './proto/dymension/delayedack/genesis.proto', messages: ['GenesisState'] }],
+      ['delaydack.params', { file: './proto/dymension/delayedack/params.proto', messages: ['Params'] }],
+
+      ['denommetadata.genesis', { file: './proto/dymension/denommetadata/genesis.proto', messages: ['GenesisState'] }],
+      ['denommetadata.metadata', { file: './proto/dymension/denommetadata/gov_denommetadata.proto', messages: ['CreateDenomMetadataProposal', 'UpdateDenomMetadataProposal'] }],
+
+
 
       // --------------------- eibc  --------------------
       ['eibc.tx', { file: './proto/dymension/eibc/tx.proto', messages: ['MsgFulfillOrder'] }],
@@ -1087,22 +1122,41 @@ const project: CosmosProject = {
           file: './proto/dymension/gamm/v1beta1/tx.proto',
           messages: [
             'MsgJoinPool',
-            'MsgJoinPoolResponse',
             'MsgExitPool',
-            'MsgExitPoolResponse',
             'MsgSwapExactAmountIn',
-            'MsgSwapExactAmountInResponse',
             'MsgSwapExactAmountOut',
-            'MsgSwapExactAmountOutResponse',
             'MsgJoinSwapExternAmountIn',
-            'MsgJoinSwapExternAmountInResponse',
             'MsgJoinSwapShareAmountOut',
-            'MsgJoinSwapShareAmountOutResponse',
             'MsgExitSwapShareAmountIn',
-            'MsgExitSwapShareAmountInResponse',
             'MsgExitSwapExternAmountOut',
-            'MsgExitSwapExternAmountOutResponse',
           ],
+        },
+      ],
+      [
+        'gmma.poolmodels.balancer',
+        {
+          file: './proto/dymension/gamm/poolmodels/balancer/v1beta1/tx.proto',
+          messages: [
+            'MsgCreateBalancerPool',
+          ],
+        },
+      ],
+      [
+        'gmma.poolmodels',
+        {
+          file: './proto/dymension/gamm/poolmodels/stableswap/v1beta1/tx.proto',
+          messages: [
+            'MsgCreateStableswapPool',
+            'MsgStableSwapAdjustScalingFactors'
+          ],
+        },
+      ],
+      [
+        'gmma.balancerPool',
+        {
+          file: './proto/dymension/gamm/v1beta1/balancerPool.proto',
+          messages: ['SmoothWeightChangeParams', 'PoolParams', 'PoolAsset', 'Pool']
+          ,
         },
       ],
       // --------------------- Lookup -----------------
@@ -1112,17 +1166,11 @@ const project: CosmosProject = {
           file: './proto/dymension/lockup/tx.proto',
           messages: [
             'MsgLockTokens',
-            'MsgLockTokensResponse',
             'MsgBeginUnlockingAll',
-            'MsgBeginUnlockingAllResponse',
             'MsgBeginUnlocking',
-            'MsgBeginUnlockingResponse',
             'MsgExtendLockup',
-            'MsgExtendLockupResponse',
             'MsgForceUnlock',
-            'MsgForceUnlockResponse',
             'MsgSetRewardReceiverAddress',
-            'MsgSetRewardReceiverAddressResponse',
           ],
         },
       ],
@@ -1135,8 +1183,40 @@ const project: CosmosProject = {
             'SwapAmountOutRoute',
             'SwapAmountInSplitRoute',
             'SwapAmountOutSplitRoute',
-            '',
           ],
+        },
+      ],
+      [
+        'osmosis.balancerPool',
+        {
+          file: './proto/osmosis/gamm/v1beta1/balancerPool.proto',
+          messages:
+            ['SmoothWeightChangeParams', 'PoolParams', 'PoolAsset', 'Pool']
+
+          ,
+        },
+      ],
+      // [
+      //   'osmosis.lockup',
+      //   {
+      //     file: './proto/osmosis/lockup/tx.proto',
+      //     messages: [
+      //       'MsgLockTokens',
+      //       'MsgBeginUnlockingAll',
+      //       'MsgBeginUnlocking',
+      //       'MsgExtendLockup',
+      //       'MsgForceUnlock',
+      //       'MsgSetRewardReceiverAddress',
+      //     ],
+      //   },
+      // ],
+      // --------------------- Rollapp -----------------
+      [
+        'lookup.v1.tx',
+        {
+          file: './proto/dymension/rollapp/tx.proto',
+          messages: ['MsgCreateRollapp', 'MsgUpdateState', 'MsgRollappGenesisEvent']
+          ,
         },
       ],
     ]),
@@ -1145,7 +1225,7 @@ const project: CosmosProject = {
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 527554,
+      startBlock: 541021,
       // endBlock:13211057,
       mapping: {
         file: './dist/index.js',

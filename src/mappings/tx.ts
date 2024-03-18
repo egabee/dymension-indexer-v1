@@ -36,6 +36,6 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
 
   // await sendBatchOfMessagesToKafka({ topic: TOPIC_MESSAGE, message: transaction })
 
-  logger.info(`Full tx: ${toJson(txMessages)}`)
+  // logger.info(`Full tx: ${toJson(txMessages)}`)
   // logger.info(`and this is the old ${toJson(transaction)}`)
 }
