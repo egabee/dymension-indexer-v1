@@ -2,13 +2,14 @@ import { CosmosBlock, CosmosTransaction } from '@subql/types-cosmos'
 import isBase64 from 'is-base64'
 import * as fs from 'fs'
 import { UnknownMessageType } from '../mappings/interfaces'
+import Long from 'long'
 
 export function getTimestamp(block: CosmosBlock): bigint {
   return BigInt(block.header.time.valueOf())
 }
 
 export function toJson(o: any): string {
-  return JSON.stringify(o, (_, v) => (typeof v === 'bigint' ? v.toString() : v)).replace(/\\/g, '')
+  return JSON.stringify(o, (_, v) => (Long.isLong(v) ? v.toString() : v))
 }
 
 export function isTransactionSuccessful(tx: CosmosTransaction): boolean {
@@ -25,21 +26,31 @@ export function decodeBase64IfEncoded(input: string): string {
   return isBase64(input) ? Buffer.from(input, 'base64').toString() : input
 }
 
+/**
+ * Convert input to string using `JSON.stringify` and compare it with `'{}'`
+ * @param input any
+ * @returns boolean
+ */
+export function isEmptyStringObject(input: any): boolean {
+  return JSON.stringify(input) === '{}'
+}
+
 const jsonFilePath = '/app/unknown_types/unknown_types.json'
 
 export function addToUnknownMessageTypes(newEntry: UnknownMessageType): void {
-  // logger.info(`this is ========>> ${toJson(newEntry)}`)
+  logger.info(`%%%%%%%%%% UnknownType detected %%%%%%%%% ${toJson(newEntry)} `)
+
   let data: any = []
   const jsonData = fs.readFileSync(jsonFilePath, 'utf-8')
   if (jsonData) {
     data = JSON.parse(jsonData)
   }
-  // logger.info('File exists. Existing data:', toJson(data))
+  logger.info('File exists. Existing data:', toJson(data))
 
   try {
     const existingEntryIndex = data.findIndex((entry: any) => entry['type'] === newEntry['type'])
 
-    // logger.info(`Entry to be added: ${toJson(newEntry)}`)
+    logger.info(`Entry to be added: ${toJson(newEntry)}`)
 
     if (existingEntryIndex === -1) {
       // Entry doesn't exist, create a new entry
@@ -48,11 +59,10 @@ export function addToUnknownMessageTypes(newEntry: UnknownMessageType): void {
         heights: newEntry.blocks,
       })
 
-      // logger.info('New entry added successfully.')
+      logger.info('New entry added successfully.')
     } else {
       if (data[existingEntryIndex]['heights']) {
         const existingHeights = data[existingEntryIndex]['heights']
-
         const newHeights = newEntry.blocks
         const uniqueHeights = Array.from(new Set([...existingHeights, ...newHeights]))
 
@@ -68,16 +78,4 @@ export function addToUnknownMessageTypes(newEntry: UnknownMessageType): void {
     logger.error('Error during processing:', error)
     throw error // Rethrow the error to stop the indexer if there is an issue
   }
-}
-
-export function decodeAsciIfEncodeded(input: any): string | void {
-  if (Array.isArray(input)) {
-    const decodedValues = input.map((item) => (Array.isArray(item) ? String.fromCharCode(...item) : item))
-
-    const combinedString = decodedValues.join('')
-
-    return combinedString
-  }
-
-  return input
 }
