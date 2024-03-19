@@ -67,7 +67,7 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
   const transaction = createTransactionObject(tx, authInfo, signatures, messages)
   // await iggyProducer.postMessage(transaction)
   // await sendBatchOfMessagesToKafka({ topic: TOPIC_MESSAGE, message: transaction })
-  logger.info(`Full tx: ${toJson(transaction)}`)
+  logger.debug(`Full tx: ${toJson(transaction)}`)
 }
 
 /**

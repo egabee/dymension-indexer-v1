@@ -28,13 +28,13 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: [
-      'https://dymension-rpc.publicnode.com:443',
-      // 'https://full-node.testnet-1.coreum.dev:26657'
-      // https://injective-rpc.w3coins.io   52669166
+      // 'https://dymension-rpc.publicnode.com:443',
+      // 'https://dymension-testnet.rpc.kjnodes.com/'
+      'https://froopyland.blockpi.network:443/rpc/v1/public/'
     ],
 
     // --------------- Chain id ------------------ [ ]
-    chainId: 'dymension_1100-1',
+    chainId: 'froopyland_100-1',
 
     chaintypes: new Map([
       // =====================================================
@@ -1114,6 +1114,16 @@ const project: CosmosProject = {
           ],
         },
       ],
+      [
+        'ethermint.evm.v1.genesis',
+        {
+          file: './proto/ethermint/evm/v1/genesis.proto',
+          messages: [
+            'GenesisState',
+            'GenesisAccount',
+          ],
+        },
+      ],
 
       // --------------------- gamm -------------------
       [
@@ -1174,6 +1184,60 @@ const project: CosmosProject = {
           ],
         },
       ],
+      
+      // --------------------- Rollapp -----------------
+      [
+        'rollapp.v1.tx',
+        {
+          file: './proto/dymension/rollapp/tx.proto',
+          messages: ['MsgCreateRollapp', 'MsgUpdateState', 'MsgRollappGenesisEvent']
+
+        },
+      ],
+      [
+        'rollapp.descriptor',
+        {
+          file: './proto/dymension/rollapp/block_descriptor.proto',
+          messages: ['BlockDescriptor']
+
+        },
+      ],
+      [
+        'rollapp',
+        {
+          file: './proto/dymension/rollapp/rollapp.proto',
+          messages: ['GenesisAccount', 'RollappGenesisState', 'Rollapp', 'RollappSummary']
+
+
+        },
+      ],
+      [
+        'rollapp.bank',
+        {
+          file: './proto/dymension/rollapp/bank.proto',
+          messages: ['TokenMetadata', 'DenomUnit']
+
+        },
+      ],
+      //------------------------ sequencer ------------------- 
+      // [
+      //   'sequencer',
+      //   {
+      //     file: './proto/dymension/sequencer/tx.proto',
+      //     messages: ['MsgCreateSequencer']
+
+      //   },
+      // ],
+      // [
+      //   'sequencer.dscription',
+      //   {
+      //     file: './proto/dymension/sequencer/description.proto',
+      //     messages: ['Description']
+
+      //   },
+      // ],
+
+      // ---------------------- osmosis --------------
       [
         'osmosis.poolmanager.v1beta1',
         {
@@ -1196,6 +1260,22 @@ const project: CosmosProject = {
           ,
         },
       ],
+      [
+        'osmosis.gmma.v1.tx',
+        {
+          file: './proto/osmosis/gamm/v1beta1/tx.proto',
+          messages: [
+            'MsgJoinPool',
+            'MsgExitPool',
+            'MsgSwapExactAmountIn',
+            'MsgSwapExactAmountOut',
+            'MsgJoinSwapExternAmountIn',
+            'MsgJoinSwapShareAmountOut',
+            'MsgExitSwapShareAmountIn',
+            'MsgExitSwapExternAmountOut',
+          ],
+        },
+      ],
       // [
       //   'osmosis.lockup',
       //   {
@@ -1210,23 +1290,18 @@ const project: CosmosProject = {
       //     ],
       //   },
       // ],
-      // --------------------- Rollapp -----------------
-      [
-        'lookup.v1.tx',
-        {
-          file: './proto/dymension/rollapp/tx.proto',
-          messages: ['MsgCreateRollapp', 'MsgUpdateState', 'MsgRollappGenesisEvent']
-          ,
-        },
-      ],
+      
     ]),
   },
 
   dataSources: [
     {
       kind: CosmosDatasourceKind.Runtime,
-      startBlock: 541021,
-      // endBlock:13211057,
+      startBlock:
+        // 
+        3067773,
+      // 1326903,
+      // endBlock:3067775,
       mapping: {
         file: './dist/index.js',
         handlers: [
