@@ -1184,7 +1184,7 @@ const project: CosmosProject = {
           ],
         },
       ],
-      
+
       // --------------------- Rollapp -----------------
       [
         'rollapp.v1.tx',
@@ -1219,23 +1219,23 @@ const project: CosmosProject = {
 
         },
       ],
-      //------------------------ sequencer ------------------- 
-      // [
-      //   'sequencer',
-      //   {
-      //     file: './proto/dymension/sequencer/tx.proto',
-      //     messages: ['MsgCreateSequencer']
+      // ------------------------sequencer -------------------
+      [
+        'sequencer',
+        {
+          file: './proto/dymension/sequencer/tx.proto',
+          messages: ['MsgCreateSequencer']
 
-      //   },
-      // ],
-      // [
-      //   'sequencer.dscription',
-      //   {
-      //     file: './proto/dymension/sequencer/description.proto',
-      //     messages: ['Description']
+        },
+      ],
+      [
+        'sequencer.dscription',
+        {
+          file: './proto/dymension/sequencer/description.proto',
+          messages: ['Description']
 
-      //   },
-      // ],
+        },
+      ],
 
       // ---------------------- osmosis --------------
       [
@@ -1290,7 +1290,7 @@ const project: CosmosProject = {
       //     ],
       //   },
       // ],
-      
+
     ]),
   },
 
@@ -1298,10 +1298,10 @@ const project: CosmosProject = {
     {
       kind: CosmosDatasourceKind.Runtime,
       startBlock:
-        // 
-        3067773,
+      1054886  ,
       // 1326903,
-      // endBlock:3067775,
+      endBlock: 
+      1054886 ,
       mapping: {
         file: './dist/index.js',
         handlers: [
