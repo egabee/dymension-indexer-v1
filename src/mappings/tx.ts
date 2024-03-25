@@ -4,7 +4,7 @@ import { TextDecoder } from 'util'
 import { Any as ProtoAny } from '../types/proto-interfaces/google/protobuf/any'
 import { TOPIC_MESSAGE } from '../common/constants'
 // import { sendBatchOfMessagesToKafka } from '../common/kafka-producer'
-import { addToUnknownMessageTypes, isEmptyStringObject, toJson } from '../common/utils'
+import { addToUnknownMessageTypes, decodeBase64IfEncoded, isEmptyStringObject, toJson } from '../common/utils'
 import { AuthInfo, EventLog, GenericMessage, TransactionObject } from './interfaces'
 import { IggyProducer } from '../common/iggy-producer'
 
@@ -19,7 +19,7 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
   const { height } = tx.block.header
   // logger.info(`-------- ${height} -----------`)
 
-  
+
   const messages: GenericMessage[] = []
 
   for (const { typeUrl, value } of tx.decodedTx.body.messages) {
@@ -42,12 +42,12 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
     if (pubKey) {
       // logger.info(`publicKey ${JSON.stringify(pubKey)}`)
       const msgType = registry.lookupType(pubKey.typeUrl)
-      const cryptoType=pubKey.typeUrl;
+      const cryptoType = pubKey.typeUrl;
       const decodedSignerInfoValue = msgType?.decode(pubKey.value)
       // logger.info(`Decoded signer info: ${JSON.stringify(decodedSignerInfoValue)}`)
 
       authInfo.signerInfos.push({
-        pubKey: {value:decodedSignerInfoValue,typeUrl:cryptoType},
+        pubKey: { value: decodedSignerInfoValue, typeUrl: cryptoType },
         sequence,
         modeInfo,
       })
@@ -56,7 +56,7 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
   authInfo.fee = tx.decodedTx.authInfo.fee
   const signaturesArray = [];
   for (const signature of tx.decodedTx.signatures) {
-      signaturesArray.push(signature);
+    signaturesArray.push(signature);
   }
 
   const concatenatedSignatures = new Uint8Array(signaturesArray.flatMap(signature => Array.from(signature)));
@@ -79,7 +79,7 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
  */
 function decodeNestedMessages(decodedMessage: any, originalMessage: ProtoAny, block: number): GenericMessage {
   const { typeUrl } = originalMessage
-  
+
   if (
     [
       '/cosmwasm.wasm.v1.MsgExecuteContract',
@@ -118,6 +118,7 @@ function decodeNestedMessages(decodedMessage: any, originalMessage: ProtoAny, bl
     }
     decodedMessage.msgs = msgs
   }
+  // logger.info(`------------------------------------> ${typeUrl}`)
 
   return { ...decodedMessage, type: typeUrl }
 }
@@ -164,10 +165,11 @@ function createTransactionObject(
   const txEvents: EventLog[] = events.map(({ type, attributes }: any) => ({
     type,
     attributes: attributes.map(({ key, value }: any) => ({
-      key: key,
-      value: value,
+      key: decodeBase64IfEncoded(key),
+      value: decodeBase64IfEncoded(value),
     })),
   }))
+
 
   return {
     id: cosmosTx.hash,
@@ -184,7 +186,7 @@ function createTransactionObject(
     signatures,
     memo: cosmosTx.decodedTx.body.memo,
     timeoutHeight: cosmosTx.decodedTx.body.timeoutHeight,
-    extensionOptions:cosmosTx.decodedTx.body.extensionOptions,
-    nonCriticalExtensionOptions:cosmosTx.decodedTx.body.nonCriticalExtensionOptions
+    extensionOptions: cosmosTx.decodedTx.body.extensionOptions,
+    nonCriticalExtensionOptions: cosmosTx.decodedTx.body.nonCriticalExtensionOptions
   }
 }
