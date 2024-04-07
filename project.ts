@@ -19,6 +19,22 @@ const project: CosmosProject = {
   schema: {
     file: './schema.graphql',
   },
+
+  dataSources: [
+    {
+      kind: CosmosDatasourceKind.Runtime,
+      startBlock: 1,
+      mapping: {
+        file: './dist/index.js',
+        handlers: [
+          {
+            handler: 'handleTx',
+            kind: CosmosHandlerKind.Transaction,
+          },
+        ],
+      },
+    },
+  ],
   network: {
     /* The genesis hash of the network (hash of block 0) */
     /**
@@ -30,7 +46,7 @@ const project: CosmosProject = {
     endpoint: [
       // 'https://dymension-rpc.publicnode.com:443',
       // 'https://dymension-testnet.rpc.kjnodes.com/'
-      'https://froopyland.blockpi.network:443/rpc/v1/public/'
+      'https://froopyland.blockpi.network:443/rpc/v1/public/',
     ],
 
     // --------------- Chain id ------------------ [ ]
@@ -1075,9 +1091,13 @@ const project: CosmosProject = {
       ['delaydack.params', { file: './proto/dymension/delayedack/params.proto', messages: ['Params'] }],
 
       ['denommetadata.genesis', { file: './proto/dymension/denommetadata/genesis.proto', messages: ['GenesisState'] }],
-      ['denommetadata.metadata', { file: './proto/dymension/denommetadata/gov_denommetadata.proto', messages: ['CreateDenomMetadataProposal', 'UpdateDenomMetadataProposal'] }],
-
-
+      [
+        'denommetadata.metadata',
+        {
+          file: './proto/dymension/denommetadata/gov_denommetadata.proto',
+          messages: ['CreateDenomMetadataProposal', 'UpdateDenomMetadataProposal'],
+        },
+      ],
 
       // --------------------- eibc  --------------------
       ['eibc.tx', { file: './proto/dymension/eibc/tx.proto', messages: ['MsgFulfillOrder'] }],
@@ -1118,10 +1138,7 @@ const project: CosmosProject = {
         'ethermint.evm.v1.genesis',
         {
           file: './proto/ethermint/evm/v1/genesis.proto',
-          messages: [
-            'GenesisState',
-            'GenesisAccount',
-          ],
+          messages: ['GenesisState', 'GenesisAccount'],
         },
       ],
 
@@ -1146,27 +1163,21 @@ const project: CosmosProject = {
         'gmma.poolmodels.balancer',
         {
           file: './proto/dymension/gamm/poolmodels/balancer/v1beta1/tx.proto',
-          messages: [
-            'MsgCreateBalancerPool',
-          ],
+          messages: ['MsgCreateBalancerPool'],
         },
       ],
       [
         'gmma.poolmodels',
         {
           file: './proto/dymension/gamm/poolmodels/stableswap/v1beta1/tx.proto',
-          messages: [
-            'MsgCreateStableswapPool',
-            'MsgStableSwapAdjustScalingFactors'
-          ],
+          messages: ['MsgCreateStableswapPool', 'MsgStableSwapAdjustScalingFactors'],
         },
       ],
       [
         'gmma.balancerPool',
         {
           file: './proto/dymension/gamm/v1beta1/balancerPool.proto',
-          messages: ['SmoothWeightChangeParams', 'PoolParams', 'PoolAsset', 'Pool']
-          ,
+          messages: ['SmoothWeightChangeParams', 'PoolParams', 'PoolAsset', 'Pool'],
         },
       ],
       // --------------------- Lookup -----------------
@@ -1190,33 +1201,28 @@ const project: CosmosProject = {
         'rollapp.v1.tx',
         {
           file: './proto/dymension/rollapp/tx.proto',
-          messages: ['MsgCreateRollapp', 'MsgUpdateState', 'MsgRollappGenesisEvent']
-
+          messages: ['MsgCreateRollapp', 'MsgUpdateState', 'MsgRollappGenesisEvent'],
         },
       ],
       [
         'rollapp.descriptor',
         {
           file: './proto/dymension/rollapp/block_descriptor.proto',
-          messages: ['BlockDescriptor']
-
+          messages: ['BlockDescriptor'],
         },
       ],
       [
         'rollapp',
         {
           file: './proto/dymension/rollapp/rollapp.proto',
-          messages: ['GenesisAccount', 'RollappGenesisState', 'Rollapp', 'RollappSummary']
-
-
+          messages: ['GenesisAccount', 'RollappGenesisState', 'Rollapp', 'RollappSummary'],
         },
       ],
       [
         'rollapp.bank',
         {
           file: './proto/dymension/rollapp/bank.proto',
-          messages: ['TokenMetadata', 'DenomUnit']
-
+          messages: ['TokenMetadata', 'DenomUnit'],
         },
       ],
       // ------------------------sequencer -------------------
@@ -1224,16 +1230,14 @@ const project: CosmosProject = {
         'sequencer',
         {
           file: './proto/dymension/sequencer/tx.proto',
-          messages: ['MsgCreateSequencer']
-
+          messages: ['MsgCreateSequencer'],
         },
       ],
       [
         'sequencer.dscription',
         {
           file: './proto/dymension/sequencer/description.proto',
-          messages: ['Description']
-
+          messages: ['Description'],
         },
       ],
 
@@ -1242,22 +1246,14 @@ const project: CosmosProject = {
         'osmosis.poolmanager.v1beta1',
         {
           file: './proto/osmosis/poolmanager/v1beta1/swap_route.proto',
-          messages: [
-            'SwapAmountInRoute',
-            'SwapAmountOutRoute',
-            'SwapAmountInSplitRoute',
-            'SwapAmountOutSplitRoute',
-          ],
+          messages: ['SwapAmountInRoute', 'SwapAmountOutRoute', 'SwapAmountInSplitRoute', 'SwapAmountOutSplitRoute'],
         },
       ],
       [
         'osmosis.balancerPool',
         {
           file: './proto/osmosis/gamm/v1beta1/balancerPool.proto',
-          messages:
-            ['SmoothWeightChangeParams', 'PoolParams', 'PoolAsset', 'Pool']
-
-          ,
+          messages: ['SmoothWeightChangeParams', 'PoolParams', 'PoolAsset', 'Pool'],
         },
       ],
       [
@@ -1290,29 +1286,8 @@ const project: CosmosProject = {
       //     ],
       //   },
       // ],
-
     ]),
   },
-
-  dataSources: [
-    {
-      kind: CosmosDatasourceKind.Runtime,
-      startBlock:
-      1054886  ,
-      // 1326903,
-      endBlock: 
-      1054886 ,
-      mapping: {
-        file: './dist/index.js',
-        handlers: [
-          {
-            handler: 'handleTx',
-            kind: CosmosHandlerKind.Transaction,
-          },
-        ],
-      },
-    },
-  ],
 }
 
 // Must set default to the project instance
