@@ -4,7 +4,7 @@ import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
 import { IggyProducer } from '../common/iggy-producer'
 import { Any, Any as ProtoAny } from '../types/proto-interfaces/google/protobuf/any'
-import { addToUnknownMessageTypes, isEmptyStringObject, toJson } from '../common/utils'
+import { addToUnknownMessageTypes, decodeBase64IfEncoded, isEmptyStringObject, toJson } from '../common/utils'
 import { CustomAuthInfo, EventLog, GenericMessage, TransactionObject, TxExtensions } from './interfaces'
 
 let iggyProducer: IggyProducer
@@ -146,8 +146,8 @@ function createTransactionObject(
   const txEvents: EventLog[] = events.map(({ type, attributes }: any) => ({
     type,
     attributes: attributes.map(({ key, value }: any) => ({
-      key: key,
-      value: value,
+      key: decodeBase64IfEncoded(key),
+      value: decodeBase64IfEncoded(value),
     })),
   }))
 
