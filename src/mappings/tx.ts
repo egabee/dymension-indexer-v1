@@ -1,12 +1,11 @@
 import { CosmosTransaction } from '@subql/types-cosmos'
 import { TextDecoder } from 'util'
+import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
-import { Any as ProtoAny } from '../types/proto-interfaces/google/protobuf/any'
-import { TOPIC_MESSAGE } from '../common/constants'
-// import { sendBatchOfMessagesToKafka } from '../common/kafka-producer'
-import { addToUnknownMessageTypes, decodeBase64IfEncoded, isEmptyStringObject, toJson } from '../common/utils'
-import { AuthInfo, EventLog, GenericMessage, TransactionObject } from './interfaces'
 import { IggyProducer } from '../common/iggy-producer'
+import { Any, Any as ProtoAny } from '../types/proto-interfaces/google/protobuf/any'
+import { addToUnknownMessageTypes, isEmptyStringObject, toJson } from '../common/utils'
+import { CustomAuthInfo, EventLog, GenericMessage, TransactionObject, TxExtensions } from './interfaces'
 
 let iggyProducer: IggyProducer
 
@@ -15,15 +14,13 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
     iggyProducer = await IggyProducer.create(process.env.IGGY_URL!)
   }
 
-
   const { height } = tx.block.header
-  // logger.info(`-------- ${height} -----------`)
-
 
   const messages: GenericMessage[] = []
 
   for (const { typeUrl, value } of tx.decodedTx.body.messages) {
     const knownType = registry.lookupType(typeUrl)
+
     if (!knownType || isEmptyStringObject(knownType)) {
       addToUnknownMessageTypes({ type: typeUrl, blocks: [height] })
       continue
@@ -37,37 +34,21 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
     }
   }
 
-  const authInfo: { signerInfos: any[]; fee?: any } = { signerInfos: [] }
-  for (const { publicKey: pubKey, sequence, modeInfo } of tx.decodedTx.authInfo.signerInfos) {
-    if (pubKey) {
-      // logger.info(`publicKey ${JSON.stringify(pubKey)}`)
-      const msgType = registry.lookupType(pubKey.typeUrl)
-      const cryptoType = pubKey.typeUrl;
-      const decodedSignerInfoValue = msgType?.decode(pubKey.value)
-      // logger.info(`Decoded signer info: ${JSON.stringify(decodedSignerInfoValue)}`)
+  const signatures = Buffer.from(
+    new Uint8Array(tx.decodedTx.signatures.flatMap((signature) => Array.from(signature))),
+  ).toString('base64')
 
-      authInfo.signerInfos.push({
-        pubKey: { value: decodedSignerInfoValue, typeUrl: cryptoType },
-        sequence,
-        modeInfo,
-      })
-    }
-  }
-  authInfo.fee = tx.decodedTx.authInfo.fee
-  const signaturesArray = [];
-  for (const signature of tx.decodedTx.signatures) {
-    signaturesArray.push(signature);
-  }
+  const transaction = createTransactionObject(
+    tx,
+    messages,
+    decodeAuthInfo(tx.decodedTx.authInfo),
+    signatures,
+    decodeExtensions(tx.decodedTx.body),
+  )
 
-  const concatenatedSignatures = new Uint8Array(signaturesArray.flatMap(signature => Array.from(signature)));
-
-  const signatures = Buffer.from(concatenatedSignatures).toString('base64');
-
-  // logger.info(`========>> ${signatures} ===== ${tx.decodedTx.signatures}`)
-  const transaction = createTransactionObject(tx, authInfo, signatures, messages)
-  // await iggyProducer.postMessage(transaction)
-  // await sendBatchOfMessagesToKafka({ topic: TOPIC_MESSAGE, message: transaction })
   logger.debug(`Full tx: ${toJson(transaction)}`)
+
+  await iggyProducer.postMessage(transaction)
 }
 
 /**
@@ -118,7 +99,6 @@ function decodeNestedMessages(decodedMessage: any, originalMessage: ProtoAny, bl
     }
     decodedMessage.msgs = msgs
   }
-  // logger.info(`------------------------------------> ${typeUrl}`)
 
   return { ...decodedMessage, type: typeUrl }
 }
@@ -153,9 +133,10 @@ function tryDecodeMessage({ typeUrl, value }: ProtoAny, block: number): any {
  */
 function createTransactionObject(
   cosmosTx: CosmosTransaction,
-  authInfo: AuthInfo,
-  signatures: any,
   messages: GenericMessage[],
+  authInfo: CustomAuthInfo,
+  signatures: string,
+  extentions: TxExtensions,
 ): TransactionObject {
   const {
     tx: { events, gasUsed, gasWanted, log, code },
@@ -165,11 +146,10 @@ function createTransactionObject(
   const txEvents: EventLog[] = events.map(({ type, attributes }: any) => ({
     type,
     attributes: attributes.map(({ key, value }: any) => ({
-      key: decodeBase64IfEncoded(key),
-      value: decodeBase64IfEncoded(value),
+      key: key,
+      value: value,
     })),
   }))
-
 
   return {
     id: cosmosTx.hash,
@@ -186,7 +166,63 @@ function createTransactionObject(
     signatures,
     memo: cosmosTx.decodedTx.body.memo,
     timeoutHeight: cosmosTx.decodedTx.body.timeoutHeight,
-    extensionOptions: cosmosTx.decodedTx.body.extensionOptions,
-    nonCriticalExtensionOptions: cosmosTx.decodedTx.body.nonCriticalExtensionOptions
+    extensionOptions: extentions.extensionOptions,
+    nonCriticalExtensionOptions: extentions.nonCriticalExtensionOptions,
   }
+}
+
+function decodeAuthInfo({ fee, signerInfos }: AuthInfo): CustomAuthInfo {
+  const authSignerInfos = []
+
+  for (const { publicKey: pkey, sequence, modeInfo } of signerInfos) {
+    let pubKeyValue
+
+    if (pkey) {
+      const msgType = registry.lookupType(pkey.typeUrl)
+      if (!msgType) {
+        throw new Error(`Message type not found for pubKey.typeUrl = ${pkey.typeUrl}`)
+      }
+
+      pubKeyValue = msgType.decode(pkey.value)
+    }
+
+    try {
+      pubKeyValue = pubKeyValue ? JSON.parse(JSON.stringify(pubKeyValue)) : {}
+    } catch (err) {
+      logger.error(`JSON ser/deser public key error. Reason ${toJson(err)}`)
+    }
+
+    authSignerInfos.push({
+      pubKey: { ...pubKeyValue, type: pkey?.typeUrl },
+      sequence: sequence.toString(),
+      modeInfo,
+    })
+  }
+
+  return {
+    signerInfos: authSignerInfos,
+    fee,
+  }
+}
+
+function decodeExtensions(txBody: TxBody): TxExtensions {
+  const extensionOptions = txBody.extensionOptions.map((ext: Any) => {
+    const ty = registry.lookupType(ext.typeUrl)
+    if (!ty) {
+      throw new Error(`Unknown type detected for extensionOptions ${ext.typeUrl}`)
+    }
+
+    return { type: ext.typeUrl, value: ty.decode(ext.value) }
+  })
+
+  const nonCriticalExtensionOptions = txBody.nonCriticalExtensionOptions.map((ext: Any) => {
+    const ty = registry.lookupType(ext.typeUrl)
+    if (!ty) {
+      throw new Error(`Unknown type detected for extensionOptions ${ext.typeUrl}`)
+    }
+
+    return { type: ext.typeUrl, value: ty.decode(ext.value) }
+  })
+
+  return { extensionOptions, nonCriticalExtensionOptions }
 }

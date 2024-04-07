@@ -46,7 +46,7 @@ const project: CosmosProject = {
     endpoint: [
       // 'https://dymension-rpc.publicnode.com:443',
       // 'https://dymension-testnet.rpc.kjnodes.com/'
-      'https://froopyland.blockpi.network:443/rpc/v1/public/',
+      'https://froopyland.blockpi.network/rpc/v1/public/',
     ],
 
     // --------------- Chain id ------------------ [ ]

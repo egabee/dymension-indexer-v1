@@ -10,6 +10,9 @@ dependencies:
   '@types/node':
     specifier: ^17.0.45
     version: 17.0.45
+  cosmjs-types:
+    specifier: '0.7'
+    version: 0.7.2
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
