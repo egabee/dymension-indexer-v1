@@ -43,6 +43,7 @@ const project: CosmosProject = {
      * When developing your project we suggest getting a private API key
      * We suggest providing an array of endpoints for increased speed and reliability
      */
+    bypassBlocks: [],
     endpoint: [
       // 'https://dymension-rpc.publicnode.com:443',
       // 'https://dymension-testnet.rpc.kjnodes.com/'
@@ -1140,6 +1141,10 @@ const project: CosmosProject = {
           file: './proto/ethermint/evm/v1/genesis.proto',
           messages: ['GenesisState', 'GenesisAccount'],
         },
+      ],
+      [
+        'ethermint.evm.crypto.v1',
+        { file: './proto/ethermint/crypto/v1/ethsecp256k1/keys.proto', messages: ['PubKey', 'PrivKey'] },
       ],
 
       // --------------------- gamm -------------------
