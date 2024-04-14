@@ -28,9 +28,15 @@ const project: CosmosProject = {
      * We suggest providing an array of endpoints for increased speed and reliability
      */
     endpoint: [
+      // "https://rpc-dymension-testnet.mzonder.com/block_results",
+      "https://rpc-dymension-testnet.mzonder.com",
+      // "https://rpc-dymension-testnet.mzonder.com/block",
+      // "https://rpc-dymension-testnet.mzonder.com/block?height=&",
+      // "https://rpc-dymension-testnet.mzonder.com/block?height=$",
+
       // 'https://dymension-rpc.publicnode.com:443',
       // 'https://dymension-testnet.rpc.kjnodes.com/'
-      'https://froopyland.blockpi.network:443/rpc/v1/public/'
+      // 'https://froopyland.blockpi.network:443/rpc/v1/public/'
     ],
 
     // --------------- Chain id ------------------ [ ]
@@ -1059,6 +1065,16 @@ const project: CosmosProject = {
           ],
         },
       ],
+      [
+        'ibc.lightclients.dymint.Header',
+        {
+          file: './proto/ibc/lightclients/dymint/dymint.proto',
+          messages: [
+            'Header','Commit','Block','Data','Batch'
+          ],
+        },
+      ],
+      
       ['google.protobuf.Any', { file: './proto/google/protobuf/any.proto', messages: ['Any'] }],
       ['google.protobuf.Duration', { file: './proto/google/protobuf/duration.proto', messages: ['Duration'] }],
       ['google.protobuf.Timestamp', { file: './proto/google/protobuf/timestamp.proto', messages: ['Timestamp'] }],
@@ -1298,10 +1314,10 @@ const project: CosmosProject = {
     {
       kind: CosmosDatasourceKind.Runtime,
       startBlock:
-      1054886  ,
+        100,
       // 1326903,
-      endBlock: 
-      1054886 ,
+      // endBlock: 
+      // 1054886 ,
       mapping: {
         file: './dist/index.js',
         handlers: [
