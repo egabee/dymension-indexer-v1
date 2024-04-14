@@ -8,19 +8,6 @@ function currentTimestampInSeconds(): number {
 }
 
 export class IggyProducer {
-  authTokens: {
-    user_id: number
-    tokens: {
-      access_token: {
-        token: string
-        expiry: number
-      }
-      refresh_token: {
-        token: string
-        expiry: number
-      }
-    }
-  }
   url: string
   requestHeaders: {
     'Content-Type': 'application/json'
@@ -28,43 +15,22 @@ export class IggyProducer {
   }
 
   constructor(url: string) {
+    const accessToken = process.env.ACCESS_TOKEN
+    if (!accessToken) {
+      throw new Error(`ACCESS_TOKEN env variable is undefined`)
+    }
+
     this.url = url
-    this.authTokens = {} as any
-    this.requestHeaders = {} as any
+    this.requestHeaders = { 'Content-Type': 'application/json', Authorization: `Bearer ${accessToken}` }
   }
 
   static async create(url: string): Promise<IggyProducer> {
     const producer = new IggyProducer(url)
-    await producer.login()
 
     await producer.createStream()
     await producer.createTopic()
 
     return producer
-  }
-
-  private async login(): Promise<void> {
-    const response = await fetch(`${this.url}/users/login`, {
-      method: 'POST',
-      body: JSON.stringify({
-        username: 'iggy',
-        password: 'iggy',
-      }),
-      headers: { 'Content-Type': 'application/json' },
-    })
-
-    const data = response.ok ? await response.json() : await response.text()
-    const status = response.status
-
-    if (data && status === 200) {
-      this.authTokens = data
-      this.requestHeaders = {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${this.authTokens.tokens.access_token.token}`,
-      }
-    } else {
-      logger.error(`Failed to login iggy server. Got ${status}`)
-    }
   }
 
   private async createStream(stream_id = 1, name = 'stream1'): Promise<void> {
@@ -95,7 +61,13 @@ export class IggyProducer {
   private async createTopic(stream_id = 1, topic_id = 1, name = 'topic1'): Promise<void> {
     const response = await fetch(`${this.url}/streams/${stream_id}/topics`, {
       method: 'POST',
-      body: JSON.stringify({ topic_id: topic_id, name: name, replication_factor: 1, partitions_count: 3 }),
+      body: JSON.stringify({
+        topic_id: topic_id,
+        name: name,
+        replication_factor: 1,
+        partitions_count: 3,
+        compression_algorithm: 'gzip',
+      }),
       headers: this.requestHeaders,
     })
 
@@ -115,10 +87,6 @@ export class IggyProducer {
   }
 
   async postMessage(message: TransactionObject): Promise<void> {
-    if (this.authTokens.tokens.access_token.expiry < currentTimestampInSeconds()) {
-      await this.login()
-    }
-
     const response = await fetch(`${this.url}/streams/1/topics/1/messages`, {
       body: JSON.stringify({
         partitioning: {
@@ -133,8 +101,11 @@ export class IggyProducer {
         ],
       }),
       method: 'POST',
-      headers: { 'Content-Type': 'application/json', Authorization: `${this.requestHeaders.Authorization}` },
+      headers: this.requestHeaders,
     })
+
+    const status = response.status
+    logger.debug(`status: ${status}`)
 
     if (response.status !== 201) {
       logger.error(`${await response.text()}`)
