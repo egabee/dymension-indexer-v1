@@ -1088,11 +1088,11 @@ const project: CosmosProject = {
         {
           file: './proto/ibc/lightclients/dymint/dymint.proto',
           messages: [
-            'Header','Commit','Block','Data','Batch'
+            'Header', 'Commit', 'Block', 'Data', 'Batch'
           ],
         },
       ],
-      
+
       ['google.protobuf.Any', { file: './proto/google/protobuf/any.proto', messages: ['Any'] }],
       ['google.protobuf.Duration', { file: './proto/google/protobuf/duration.proto', messages: ['Duration'] }],
       ['google.protobuf.Timestamp', { file: './proto/google/protobuf/timestamp.proto', messages: ['Timestamp'] }],
@@ -1311,26 +1311,7 @@ const project: CosmosProject = {
     ]),
   },
 
-  dataSources: [
-    {
-      kind: CosmosDatasourceKind.Runtime,
-      startBlock:
-        100,
-      // 1326903,
-      // endBlock: 
-      // 1054886 ,
-      mapping: {
-        file: './dist/index.js',
-        handlers: [
-          {
-            handler: 'handleTx',
-            kind: CosmosHandlerKind.Transaction,
-          },
-        ],
-      },
-    },
-  ],
-
+}
 
 // Must set default to the project instance
 export default project
