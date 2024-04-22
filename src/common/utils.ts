@@ -11,7 +11,7 @@ export function ensureEnvs(): void {
   }
 
   if (!process.env.KAFKA_BROKERS) {
-    throw new Error(`KAFKA_TOPIC environment variable is undefined`)
+    throw new Error(`KAFKA_BROKERS environment variable is undefined`)
   }
 
   if (!process.env.KAFKA_PRODUCER_CLIENT_ID) {
