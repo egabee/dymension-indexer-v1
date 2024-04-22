@@ -1088,7 +1088,7 @@ const project: CosmosProject = {
         {
           file: './proto/ibc/lightclients/dymint/dymint.proto',
           messages: [
-            'Header', 'Commit', 'Block', 'Data', 'Batch'
+            'ClientState', 'ConsensusState', 'Misbehaviour', 'Header', 'Fraction'
           ],
         },
       ],

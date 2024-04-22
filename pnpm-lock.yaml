@@ -1,9 +1,13 @@
 lockfileVersion: '6.0'
 
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
 dependencies:
   '@subql/types-core':
-    specifier: ^0.3.0
-    version: 0.3.0
+    specifier: latest
+    version: 0.6.0
   '@subql/types-cosmos':
     specifier: latest
     version: 3.3.0
@@ -3771,12 +3775,6 @@ packages:
     dependencies:
       package-json-type: 1.0.3
     dev: true
-
-  /@subql/types-core@0.3.0:
-    resolution: {integrity: sha512-PenjBDJH13oovvT6pHfHgjl40L6/i3mxG15wpk4mEqKrDeh1ohsUaSvNMmAfw6I3HyyOhfqI1gFX+uAOVKxVJA==}
-    dependencies:
-      package-json-type: 1.0.3
-    dev: false
 
   /@subql/types-core@0.4.1-0:
     resolution: {integrity: sha512-av3eW9CHFjH1rtHbyeHtYvq/8tI1ocQko0Ze7x4HOTSnvUVojwXeCOlFeGIL51dKAPPHQkHsknVrGsPDvbRheA==}
@@ -8424,6 +8422,7 @@ packages:
   /node-gyp-build@4.8.0:
     resolution: {integrity: sha512-u6fs2AEUljNho3EYTJNBfImO5QTo/J/1Etd+NVdCj7qWKUSN/bSLkZwhDv7I+w/MSC6qJ4cknepkAYykDdK8og==}
     hasBin: true
+    requiresBuild: true
     dev: true
     optional: true
 
@@ -10701,7 +10700,3 @@ packages:
   /zen-observable@0.8.15:
     resolution: {integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==}
     dev: true
-
-settings:
-  autoInstallPeers: true
-  excludeLinksFromLockfile: false

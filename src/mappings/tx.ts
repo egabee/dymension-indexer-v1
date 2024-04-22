@@ -2,17 +2,13 @@ import { CosmosTransaction } from '@subql/types-cosmos'
 import { TextDecoder } from 'util'
 import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
-import { IggyProducer } from '../common/iggy-producer'
+
 import { Any, Any as ProtoAny } from '../types/proto-interfaces/google/protobuf/any'
 import { addToUnknownMessageTypes, decodeBase64IfEncoded, isEmptyStringObject, toJson } from '../common/utils'
 import { CustomAuthInfo, EventLog, GenericMessage, TransactionObject, TxExtensions } from './interfaces'
 
-let iggyProducer: IggyProducer
 
 export async function handleTx(tx: CosmosTransaction): Promise<void> {
-  if (!iggyProducer) {
-    iggyProducer = await IggyProducer.create(process.env.IGGY_URL!)
-  }
 
   const { height } = tx.block.header
 
@@ -48,7 +44,6 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
 
   logger.debug(`Full tx: ${toJson(transaction)}`)
 
-  await iggyProducer.postMessage(transaction)
 }
 
 /**
