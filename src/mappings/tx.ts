@@ -2,14 +2,12 @@ import { CosmosTransaction } from '@subql/types-cosmos'
 import { TextDecoder } from 'util'
 import { AuthInfo, TxBody } from 'cosmjs-types/cosmos/tx/v1beta1/tx'
 
-
 import { Any, Any as ProtoAny } from '../types/proto-interfaces/google/protobuf/any'
-import { addToUnknownMessageTypes, decodeBase64IfEncoded, isEmptyStringObject, toJson } from '../common/utils'
+import { addToUnknownMessageTypes, isEmptyStringObject, toJson } from '../common/utils'
 import { CustomAuthInfo, EventLog, GenericMessage, TransactionObject, TxExtensions } from './interfaces'
-
+import { sendBatchOfMessagesToKafka } from '../common/kafka-producer'
 
 export async function handleTx(tx: CosmosTransaction): Promise<void> {
-
   const { height } = tx.block.header
 
   const messages: GenericMessage[] = []
@@ -44,6 +42,7 @@ export async function handleTx(tx: CosmosTransaction): Promise<void> {
 
   logger.debug(`Full tx: ${toJson(transaction)}`)
 
+  await sendBatchOfMessagesToKafka(transaction)
 }
 
 /**
@@ -141,8 +140,8 @@ function createTransactionObject(
   const txEvents: EventLog[] = events.map(({ type, attributes }: any) => ({
     type,
     attributes: attributes.map(({ key, value }: any) => ({
-      key: decodeBase64IfEncoded(key),
-      value: decodeBase64IfEncoded(value),
+      key: key,
+      value: value,
     })),
   }))
 
