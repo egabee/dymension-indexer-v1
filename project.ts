@@ -45,20 +45,11 @@ const project: CosmosProject = {
      */
     bypassBlocks: [],
     endpoint: [
-      // "https://rpc-dymension-testnet.mzonder.com/block_results",
-      "https://rpc-dymension-testnet.mzonder.com",
-      // "https://rpc-dymension-testnet.mzonder.com/block",
-      // "https://rpc-dymension-testnet.mzonder.com/block?height=&",
-      // "https://rpc-dymension-testnet.mzonder.com/block?height=$",
-
-      // 'https://dymension-rpc.publicnode.com:443',
-      // 'https://dymension-testnet.rpc.kjnodes.com/'
-      // 'https://froopyland.blockpi.network:443/rpc/v1/public/'
-
+      "https://dymension-rest.publicnode.com",
     ],
 
     // --------------- Chain id ------------------ [ ]
-    chainId: 'froopyland_100-1',
+    chainId: 'dymension_1100-1',
 
     chaintypes: new Map([
       // =====================================================
