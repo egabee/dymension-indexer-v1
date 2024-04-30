@@ -1121,6 +1121,7 @@ const project: CosmosProject = {
       ['eibc.tx', { file: './proto/dymension/eibc/tx.proto', messages: ['MsgFulfillOrder'] }],
 
       // --------------------- ethermint  ----------------
+      ['ethermint.types.v1', { file: './proto/ethermint/types/v1/web3.proto', messages: ['ExtensionOptionsWeb3Tx'] }],
       [
         'ethermin.evm.v1.tx',
         {
